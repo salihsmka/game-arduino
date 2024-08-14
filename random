@@ -1,0 +1,9 @@
+void generateSequence() {
+  for (int i = 0; i < 3; i++) {
+    sequence[i] = random(0, 3);
+    digitalWrite(leds[sequence[i]], HIGH);
+    delay(500);
+    digitalWrite(leds[sequence[i]], LOW);
+  }
+  tone(buzzer, 1000, 200);
+}
