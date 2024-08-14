@@ -1,0 +1,20 @@
+bool checkWin() {
+  for (int i = 0; i < 3; i++) {
+    if (userInputs[i] != sequence[i]) return false;
+  }
+  return true;
+}
+
+void signalVictory() {
+  digitalWrite(greenLed, HIGH);
+  tone(buzzer, 2000, 500);
+  delay(500);
+  digitalWrite(greenLed, LOW);
+}
+
+void signalFailure() {
+  digitalWrite(redLed, HIGH);
+  tone(buzzer, 500, 500);
+  delay(500);
+  digitalWrite(redLed, LOW);
+}
