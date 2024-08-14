@@ -1,0 +1,7 @@
+const int leds[] = {2, 3, 4};
+const int buttons[] = {5, 6, 7};
+const int buzzer = 8;
+const int greenLed = 9;
+const int redLed = 10;
+int sequence[3], userInputs[3];
+
