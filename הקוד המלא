@@ -1,0 +1,77 @@
+const int leds[] = {2, 3, 4};
+const int buttons[] = {5, 6, 7};
+const int buzzer = 8;
+const int greenLed = 9;
+const int redLed = 10;
+int sequence[3], userInputs[3];
+
+void setup() {
+  for (int i = 0; i < 3; i++) {
+    pinMode(leds[i], OUTPUT);
+    pinMode(buttons[i], INPUT_PULLUP);
+  }
+  pinMode(buzzer, OUTPUT);
+  pinMode(greenLed, OUTPUT);
+  pinMode(redLed, OUTPUT);
+  randomSeed(analogRead(0));
+}
+
+void loop() {
+  generateSequence();
+  if (getUserInputs()) {
+    if (checkWin()) signalVictory();
+    else signalFailure();
+  } else {
+    signalFailure();
+  }
+  delay(2000);
+}
+
+void generateSequence() {
+  for (int i = 0; i < 3; i++) {
+    sequence[i] = random(0, 3);
+    digitalWrite(leds[sequence[i]], HIGH);
+    delay(500);
+    digitalWrite(leds[sequence[i]], LOW);
+  }
+  tone(buzzer, 1000, 200);
+}
+
+bool getUserInputs() {
+  unsigned long startTime = millis();
+  for (int i = 0; i < 3; i++) {
+    bool buttonPressed = false;
+    while (!buttonPressed) {
+      for (int j = 0; j < 3; j++) {
+        if (digitalRead(buttons[j]) == LOW) {
+          userInputs[i] = j;
+          buttonPressed = true;
+          break;
+        }
+      }
+      if (millis() - startTime > 1000) return false;
+    }
+  }
+  return millis() - startTime <= 1000;
+}
+
+bool checkWin() {
+  for (int i = 0; i < 3; i++) {
+    if (userInputs[i] != sequence[i]) return false;
+  }
+  return true;
+}
+
+void signalVictory() {
+  digitalWrite(greenLed, HIGH);
+  tone(buzzer, 2000, 500);
+  delay(500);
+  digitalWrite(greenLed, LOW);
+}
+
+void signalFailure() {
+  digitalWrite(redLed, HIGH);
+  tone(buzzer, 500, 500);
+  delay(500);
+  digitalWrite(redLed, LOW);
+}
